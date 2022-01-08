@@ -30,7 +30,7 @@ const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
 
 app.use(cors({
     credentials: true,
-    origin: ['https://nifty-bhabha-4b478b.netlify.app', 'https://blissful-joliot-000cbf.netlify.app','https://wizardly-swanson-228aa2.netlify.app']
+    origin: '*'
 }));
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
