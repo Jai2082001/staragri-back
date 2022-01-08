@@ -31,7 +31,7 @@ let port = process.env.PORT || 3002
 
 app.use(cors({
     credentials: true,
-    origin: ['https://cycle-admin-c3292.web.app', 'https://cycle-master-new-6b4ef.web.app/']
+    origin: ['https://cycle-master-ed965.web.app', 'https://cycle-master-new-6b4ef.web.app/']
 }));
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
