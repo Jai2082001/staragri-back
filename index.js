@@ -29,12 +29,23 @@ const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
 
 let port = process.env.PORT || 3002
 
-app.use(cors({
-    credentials: true,
-}));
+// app.use(cors({
+//     credentials: true,
+// }));
+
+
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+});
 app.use(auth);
 app.use(accessoriesAdd);
 app.use(accessoryDis);
