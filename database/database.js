@@ -6,7 +6,8 @@ const mongoClient = mongoDb.MongoClient;
 let db;
 
 const mongoConnect = (callback) => {
-    mongoose.connect('mongodb://localhost:27017/ecommmerceDatabase', {
+    mongoose.connect('mongodb+srv://monu:monu@cluster0.kfzqh.mongodb.net/ecommerceDatabase?retryWrites=true&w=majority'
+        , {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
