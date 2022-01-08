@@ -31,7 +31,6 @@ let port = process.env.PORT || 3002
 
 app.use(cors({
     credentials: true,
-    origin: '*'
 }));
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
@@ -65,5 +64,6 @@ app.get('/', (req, res, next)=>{
 mongoConnect(() => {
     app.listen(port, ()=>{
         console.log('Connected')
+        console.log()
     });
 })
