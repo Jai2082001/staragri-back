@@ -27,6 +27,7 @@ const { order } = require('./router/order/orderIssue');
 const {random} = require('./router/random/random');
 const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
 
+let port = process.env.PORT || 3002
 
 app.use(cors({
     credentials: true,
@@ -58,10 +59,11 @@ app.use(order);
 app.use(random);
 app.use(bulkUpdate)
 app.get('/', (req, res, next)=>{
-    console.log('here')
+    console.log('here');
     res.send({status: 'hello'})
 })
 mongoConnect(() => {
-    app.listen('3002');
-    console.log('Connected')
+    app.listen(port, ()=>{
+        console.log('Connected')
+    });
 })
