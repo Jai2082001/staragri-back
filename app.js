@@ -57,6 +57,10 @@ app.use(cart);
 app.use(order);
 app.use(random);
 app.use(bulkUpdate)
+app.get('/', (req, res, next)=>{
+    console.log('here')
+    res.send('hellllllllo')
+})
 mongoConnect(() => {
     app.listen('3002');
     console.log('Connected')
