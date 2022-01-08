@@ -6,7 +6,7 @@ const mongoClient = mongoDb.MongoClient;
 let db;
 
 const mongoConnect = (callback) => {
-    mongoose.connect('mongodb+srv://monu:monu@cluster0.kfzqh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    mongoose.connect('mongodb+srv://jaideep:mtb123@cluster0.4ckhk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
         , {
         useNewUrlParser: true,
         useUnifiedTopology: true
