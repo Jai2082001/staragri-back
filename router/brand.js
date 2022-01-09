@@ -5,7 +5,7 @@ const router = express.Router();
 router.use('/brandDisplay', (req, res, next) => {
     let db = getDb();
     console.log('brandHere')
-    db.collection('brand').find().toArray().then((response) => {
+    db.collection('brand').find({}).toArray().then((response) => {
         if (response) {
             res.send(response);
         } else {

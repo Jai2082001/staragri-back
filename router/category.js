@@ -5,15 +5,15 @@ const getDb = require('../database/database').getDb;
 
 router.use('/categoryAdd', (req, res, next) => {
     let db = getDb();
-    let {name, img} = req.body;
+    let {name, img, parentName} = req.body;
     let {addedby} = req.headers
     console.log('here at category add')
-    db.collection('category').find({ name: name }).toArray().then((response) => {
+    db.collection('category').find({ name: name, parentName }).toArray().then((response) => {
         if (response.length>0) {
             res.send({status: 'Already In Database'})
         } else {
             console.log('foo')
-            db.collection('category').insertOne({ name: name , img: img, addedby: addedby}).then((response) => {
+            db.collection('category').insertOne({ parentName: parentName, name: name , img: img, addedby: addedby}).then((response) => {
                 res.send(response);
         })    
         }

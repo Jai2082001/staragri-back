@@ -8,7 +8,6 @@ router.use('/addProduct', (req, res, next) => {
 
     let { categories } = req.body;
     let {addedby} = req.headers; 
-
     if (categories === 'Cycle') {
         const { name, brand, emi, overprice, price, tire, frame, category, coupon, userType, gear, weight, brake, images, displayimages, stock, front, rear, suspension, quantity, categories , dateadded, desc} = req.body;
 
@@ -22,7 +21,7 @@ router.use('/addProduct', (req, res, next) => {
             }
         })
         }
-        else {
+        else if(categories === 'access') {
         let {name} = req.body  
         console.log(name)
         db.collection('cycles').find({ name: name }).toArray().then((response) => {
@@ -32,10 +31,25 @@ router.use('/addProduct', (req, res, next) => {
                 const { name, price, coupon, riderType, descPoint1, descPoint2, descPoint3, descPoint4, brand, desc, emi, overprice, images, displayimages, dateAdded, stock, quantity, forProduct, categories, cycleType } = req.body;
             
                 db.collection('cycles').insertOne({ name: name, price: price, coupon: coupon, riderType: riderType, cycleType: cycleType, descPoint1: descPoint1, descPoint2: descPoint2, descPoint3: descPoint3, dateAdded: dateAdded, stock: stock, forProduct: forProduct, overprice: overprice, images: images, displayimages: displayimages, quantity: quantity, categories: categories, descPoint3: descPoint3, desc: desc, descPoint4: descPoint4, emi: emi, brand: brand, addedby: addedby }).then((response) => {
+                    
                     res.send({status: undefined})
                 })
             
             }    
+        })
+    } else{
+        let {name} = req.body;
+        db.collection('cycles').find({name: name}).toArray().then((response)=>{
+            if(response.length){
+                res.send({status: 'error'})
+            }else {
+                const {name, price, coupon, descPoint1, descPoint2, descPoint3, descPoint4, brand, desc, emi, overprice, images, displayimages, dateAdded, stock, quantity,  categories, category } = req.body
+
+                db.collection('cycles').insertOne({name: name, price: price, coupon: coupon, descPoint1: descPoint1, descPoint2:descPoint2, descPoint3:descPoint3, descPoint4: descPoint4, brand: brand , desc: desc, emi: emi, overprice: overprice, images: images, displayimages: displayimages, stock: stock, quantity: quantity, categories: categories, category: category}).then((response)=>{
+                    console.log(response);
+                    res.send({status: undefined})
+                })
+            }
         })
     }
 })

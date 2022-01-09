@@ -26,12 +26,14 @@ const { cart } = require('./router/cartAssoication/cart')
 const { order } = require('./router/order/orderIssue');
 const {random} = require('./router/random/random');
 const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
+const {productType} = require('./router/productType/productType');
 
-let port = process.env.PORT || 3002
+
+let port = 3002
 
 app.use(cors({
     credentials: true,
-    origin: ['https://cycle-master-3282.web.app' ,  'https://cycle-admin-3282.web.app', 'https://cycle-sub.web.app']
+    origin: ['http://localhost:3001', 'http://localhost:3000', 'http://localhost:3003']
 }));
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
@@ -58,6 +60,7 @@ app.use(cart);
 app.use(order);
 app.use(random);
 app.use(bulkUpdate)
+app.use(productType)
 app.get('/', (req, res, next)=>{
     console.log('here');
     res.send({status: 'hello'})
@@ -65,6 +68,5 @@ app.get('/', (req, res, next)=>{
 mongoConnect(() => {
     app.listen(port, ()=>{
         console.log('Connected')
-        console.log()
     });
 })
