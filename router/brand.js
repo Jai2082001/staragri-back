@@ -36,20 +36,17 @@ router.use('/brandAddSub', (req, res, next)=>{
 router.use('/brandCycles', (req, res, next)=>{
     let db = getDb();
     db.collection('cycles').find().toArray().then((response)=>{
-        let access = []
-        let cycles = []
-        response.map((singleItem)=>{
-            if(singleItem.categories === 'Cycle'){
-                if(!(cycles.includes(singleItem.brand.label))){
-                    cycles.push(singleItem.brand.label)
-                }
-            }else{
-                if(!access.includes(singleItem.brand.label)){
-                    access.push(singleItem.brand.label)
-                }
+        let unif = {};
+        response.forEach((singleItem)=>{
+            unif[singleItem.categories] = [] 
+        })
+        console.log(unif)
+        response.forEach((singleItem)=>{
+            if(!(unif[singleItem.categories].includes(singleItem.brand.label))){
+                unif[singleItem.categories].push(singleItem.brand.label)
             }
-        })       
-        res.send({cycles: cycles, access: access}) 
+        })    
+        res.send({array: unif}) 
     })
 })
 

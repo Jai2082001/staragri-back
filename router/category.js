@@ -8,7 +8,7 @@ router.use('/categoryAdd', (req, res, next) => {
     let {name, img, parentName} = req.body;
     let {addedby} = req.headers
     console.log('here at category add')
-    db.collection('category').find({ name: name, parentName }).toArray().then((response) => {
+    db.collection('category').find({ name: name, parentName: parentName }).toArray().then((response) => {
         if (response.length>0) {
             res.send({status: 'Already In Database'})
         } else {
