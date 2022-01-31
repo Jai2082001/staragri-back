@@ -6,7 +6,6 @@ router.use('/addProductType', (req, res, next)=>{
     let db = getDb();
     const {name} = req.headers;
     db.collection('productType').insertOne({name: name}).then((response)=>{
-        console.log(response)
         res.send(response)
     })
 })

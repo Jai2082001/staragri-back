@@ -20,7 +20,6 @@ router.use('/addBulkCycleProduct',  (req, res, next)=>{
 
         })(j)
     }
-    console.log('ehere')
     res.send({status: 'foo'})
 })
 

@@ -7,12 +7,10 @@ router.use('/categoryAdd', (req, res, next) => {
     let db = getDb();
     let {name, img, parentName} = req.body;
     let {addedby} = req.headers
-    console.log('here at category add')
     db.collection('category').find({ name: name, parentName: parentName }).toArray().then((response) => {
         if (response.length>0) {
             res.send({status: 'Already In Database'})
         } else {
-            console.log('foo')
             db.collection('category').insertOne({ parentName: parentName, name: name , img: img, addedby: addedby}).then((response) => {
                 res.send(response);
         })    
@@ -41,9 +39,7 @@ router.use('/categoryAddSub', (req, res, next)=>{
 
 router.use('/categoryDisplay', (req, res, next) => {
     let db = getDb();
-    console.log('categoryHere')
     db.collection('category').find().toArray().then((response) => {
-        console.log(response)
         res.send(response)  
     })
 })

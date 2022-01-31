@@ -5,10 +5,8 @@ const getDb = require('../../database/database').getDb;
 
 router.use('/couponDisplay', (req, res, next) => {
     let db = getDb();
-    console.log('couponHere')
 
     db.collection('coupon').find().toArray().then((response) => {
-        console.log(response)
         res.send(response)
     
     })
@@ -20,7 +18,6 @@ router.use('/couponEdit', (req, res, next) => {
     db.collection('coupon').find().toArray().then((response) => {
         if (response.length) {
             db.collection('coupon').updateOne({ code: code }, { $set: { percent: price } }).then((response) => {
-                console.log(response);
                 res.send(response)
             })
         } else {
@@ -31,10 +28,10 @@ router.use('/couponEdit', (req, res, next) => {
 
 router.use('/couponAdd', (req, res, next) => {
     let db = getDb();
-    const { code, percent, addedby } = req.headers;
+    const { code, price, addedby } = req.headers;
     db.collection('coupon').find({ code: code }).toArray().then((response) => { 
         if (response.length === 0) {
-            db.collection('coupon').insertOne({ code: code, percent: percent, addedby: addedby }).then((response) => {
+            db.collection('coupon').insertOne({ code: code, percent: price, addedby: addedby }).then((response) => {
                 res.send(response)    
             })
         }else {

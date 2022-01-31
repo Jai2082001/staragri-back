@@ -4,12 +4,10 @@ const router = express.Router();
 
 router.use('/brandDisplay', (req, res, next) => {
     let db = getDb();
-    console.log('brandHere')
     db.collection('brand').find({}).toArray().then((response) => {
         if (response) {
             res.send(response);
         } else {
-            console.log(response)
             res.send({status: "No Brand Names"})
         }
     })
@@ -28,22 +26,22 @@ router.use('/brandAddSub', (req, res, next)=>{
     let db = getDb();
     const {subid, name, subname, imgFile} = req.body;
     db.collection('brand').insertOne({name: name, subName: subname, imgFile: imgFile, addedby: subid}).then((response)=>{
-        console.log(response);
         res.send(response)
     })
 })
 
 router.use('/brandCycles', (req, res, next)=>{
     let db = getDb();
-    db.collection('cycles').find().toArray().then((response)=>{
+    db.collection('cycles').find({}).toArray().then((response)=>{
         let unif = {};
         response.forEach((singleItem)=>{
             unif[singleItem.categories] = [] 
         })
-        console.log(unif)
         response.forEach((singleItem)=>{
-            if(!(unif[singleItem.categories].includes(singleItem.brand.label))){
-                unif[singleItem.categories].push(singleItem.brand.label)
+            if(singleItem.brand){
+                if(!(unif[singleItem.categories].includes(singleItem.brand.label))){
+                    unif[singleItem.categories].push(singleItem.brand.label)
+                }    
             }
         })    
         res.send({array: unif}) 

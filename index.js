@@ -28,6 +28,7 @@ const {random} = require('./router/random/random');
 const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
 const {productType} = require('./router/productType/productType');
 const {image} = require('./router/imgDisplay/imgDisplay');
+const {remove} = require('./router/remove/remove');
 
 let port = 3002
 
@@ -62,6 +63,7 @@ app.use(random);
 app.use(bulkUpdate)
 app.use(productType)
 app.use(image)
+app.use(remove);
 app.get('/', (req, res, next)=>{
     console.log('here');
     res.send({status: 'hello'})

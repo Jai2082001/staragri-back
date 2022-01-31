@@ -7,12 +7,18 @@ const getDb = require('../../database/database').getDb;
 router.get('/productDisplayWithFilter', (req, res, next)=>{
     let db = getDb();
     const {filtertype, stocktype, filter} = req.headers;
+    console.log(filtertype);
+    console.log(stocktype);
+    console.log(filter);
     if(filtertype !== 'undefined'){
         let stock;
         if(stocktype === 'cycles'){
             stock = 'Cycle'
-        }else{
+        }else if(stocktype === 'accessories'){
             stock = 'access'
+        }
+        else{
+            stock = stocktype
         }
         const query = {
             categories: stock
@@ -87,17 +93,14 @@ router.use('/productNames', (req, res, next)=>{
         })
         res.send(products)
     })
-
 })
 
 
 router.use('/productDisplay', (req, res, next)=>{
     let db = getDb();
     let {name} = req.headers;
-    console.log('productSingleDisplay');
     db.collection('cycles').findOne({name: name }).then((response)=>{
-        console.log(response)
-        res.send(response)
+        res.send({product: response})
     })
 })
 
@@ -205,6 +208,12 @@ router.get('/productDisplayWhole', (req, res, next)=>{
     })
 })
 
+router.get('/productDisplayWholeSub', (req, res, next)=>{
+    let db = getDb();
+    db.collection('cycles').find({addedby: req.headers.subid}).toArray().then((response)=>{
+        res.send(response)
+    })
+})
 
 router.get('/productDisplayLatest', (req, res, next) => {
     let db = getDb();

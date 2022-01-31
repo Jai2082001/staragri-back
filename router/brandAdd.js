@@ -9,7 +9,6 @@ router.use('/brandAdd', (req, res, next) => {
     let { addedby } = req.headers;
     db.collection('brand').find({ name: name, subName: subName }).toArray().then((response) => {
         if (response.length > 0) {
-            console.log('nope')
             res.send({ status: 'Already Inputed' })
         }
         else {

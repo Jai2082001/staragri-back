@@ -7,13 +7,12 @@ const ObjectId = require('mongodb').ObjectId;
 
 router.use('/addSubAdmin', (req, res, next) => {
     let db = getDb();
-    console.log(req.headers);
-    const { phonenumber, email, productedit, categoryedit, couponedit, brandedit, username, password } = req.headers
+    const { phonenumber, email, productedit, categoryedit, couponedit, brandedit, username, password, removeedit } = req.headers
     db.collection('subAdmins').find({ username: username }).toArray().then((response) => {
         if (res.length > 0) {
             res.send({status: 'Already Added In the database'})
         } else {
-            db.collection('subAdmins').insertOne({phonenumber: phonenumber, username: username, email: email, categoryedit: categoryedit, couponedit: couponedit, brandedit: brandedit, productedit: productedit, password: password}).then((response) => {
+            db.collection('subAdmins').insertOne({phonenumber: phonenumber, username: username, email: email, categoryedit: categoryedit, couponedit: couponedit, brandedit: brandedit, productedit: productedit, password: password, removeedit: removeedit}).then((response) => {
             if (response) {
                 res.send({status: 'Added'})
             } else {
@@ -30,7 +29,6 @@ router.use('/subAdminAuthentication', (req, res, next)=>{
     const cookie = req.cookies['sub'];
     const myId = new ObjectId(cookie);
     db.collection('subAdmins').findOne({ _id: myId }).then((response) => {
-        console.log(response)
         if (response) {
          res.send(response);        
         } else {
@@ -43,7 +41,6 @@ router.use('/subAdminAuthentication', (req, res, next)=>{
 router.use('/getSubAdmin', (req, res, next) => {
     let db = getDb();
     db.collection('subAdmins').find().toArray().then((response) => {
-        console.log(response);
         res.send(response);
     })
 })
@@ -51,7 +48,6 @@ router.use('/getSubAdmin', (req, res, next) => {
 router.use('/deleteSubAdmin', (req, res, next) => {
     let db = getDb();
     const { username } = req.headers;
-    console.log('deleteSubAdmin')
     db.collection('subAdmins').deleteOne({ username: username }).then((response) => {
         if (response) {
             res.send({ status: 'Deleted The Record' });
@@ -64,7 +60,6 @@ router.use('/deleteSubAdmin', (req, res, next) => {
 router.use('/updateSubAdmin', (req, res, next) => {
     let db = getDb();
     const { username, password, phonenumber, email, originalusername } = req.headers;
-    console.log('updateSubAdmin');
     db.collection('subAdmins').updateOne({ username: originalusername }, {
         $set: {
             username: username,
@@ -73,7 +68,6 @@ router.use('/updateSubAdmin', (req, res, next) => {
             email: email
         }
     }).then((response) => {
-        console.log(response)
         if (response) {
             res.send({status: 'Update the record'})
         } else {
@@ -84,7 +78,6 @@ router.use('/updateSubAdmin', (req, res, next) => {
 
 router.use('/loginSubAdmin', (req, res, next) => {
     let db = getDb();
-    console.log('loginSubAdmin')
     const { username, password } = req.headers;
     db.collection('subAdmins').find({ username: username, password: password }).toArray().then((response) => {
         if (response.length > 0) {
@@ -102,7 +95,6 @@ router.use('/loginSubAdmin', (req, res, next) => {
 
 
 router.use('/userSubAdmin', (req, res, next) => {
-    console.log('userSubAdmin');
     let db = getDb();
     const cookie = req.cookies['sub'];
     if (!cookie) {
@@ -110,7 +102,6 @@ router.use('/userSubAdmin', (req, res, next) => {
     } else {
         const claimObjectId = new ObjectId(cookie);
         db.collection('subAdmins').find({ _id: claimObjectId }).toArray().then((response) => {
-            console.log(response)
             if (response.length > 0){
                 res.send({user: response[0], status: 'loggedIn'})
             } else {
