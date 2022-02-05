@@ -7,16 +7,27 @@ const https = require('https');
 router.use('/orderIssue', (req, res, next) => {
     let db = getDb();
     const { user, address, amount } = req.body;
-    db.collection('orders').insertOne({ userid: user._id, name: user.name, email: user.email, number: user.number, cart: user.cart, address: address, status: '', amount: amount }).then((response) => {
+    const newDate = new Date().toLocaleDateString();
+    console.log(newDate)
+    db.collection('orders').insertOne({ userid: user._id, name: user.name, email: user.email, number: user.number, cart: user.cart, address: address, status: '', amount: amount, date: newDate }).then((response) => {
         db.collection('users').updateOne({ _id: new ObjectId(user._id) }, {
             $set: {
                 cart: []
             }
         }).then((response) => {
-            console.log(response)
             res.send(response)        
         })
     })
+})
+
+router.use('/invoice', (req, res, next)=>{
+    let db = getDb();
+    const {orderid} = req.headers;
+    console.log(orderid)
+    db.collection('orders').findOne({_id: new ObjectId(orderid)}).then((response)=>{
+        console.log(response)
+        res.send(response) 
+    }) 
 })
 
 router.use('/orderUser', (req, res, next)=>{
@@ -49,11 +60,14 @@ router.use('/orderAccept', async (req, res, next) => {
     let anotherCart = req.body;
     console.log(anotherCart)
     let {_id} = req.body;
+    let {length, width, weight, height} = req.headers
+    console.log(req.headers)
     let db = getDb();
     db.collection('orders').find({_id: new ObjectId(_id)}).toArray().then((response)=>{
         let responsePar = response[0];        
         db.collection('address').find({_id: new ObjectId(anotherCart.address)}).toArray().then((response)=>{
             console.log(response)
+            
             let postData = JSON.stringify({
                 "order_id": responsePar._id,
                 "order_date": "01/27/2022",
@@ -72,7 +86,7 @@ router.use('/orderAccept', async (req, res, next) => {
                 "billing_state": response[0].state,
                 "billing_country": "india",
                 "billing_email": "",
-                "billing_phone": "9024782000",
+                "billing_phone": response[0].number,
                 "billing_alternate_phone": "",
                 "shipping_is_billing": true,
                 "shipping_customer_name": response[0].fullname,
@@ -101,21 +115,29 @@ router.use('/orderAccept', async (req, res, next) => {
                 "giftwrap_charges": "",
                 "transaction_charges": "",
                 "total_discount": "",
-                "sub_total": "2000",
-                "length": "500",
-                "breadth": "500",
-                "height": "500",
-                "weight": "500",
+                "sub_total": responsePar.amount,
+                "length": length,
+                "breadth": width,
+                "height": height,
+                "weight": weight,
                 "ewaybill_no": "",
                 "customer_gstin": "",
                 "invoice_number": "",
                 "order_type": ""
         })
         let orderArray = [];
-        response.cart.map((singleItem)=>{
-
+        responsePar.cart.map((singleItem)=>{
+            orderArray.push({
+                name: singleItem.product.name,
+                sku: "1",
+                units: singleItem.quantity,
+                selling_price: singleItem.product.price,
+                discount: "",
+                hsn: singleItem.product.hsn,
+                tax: singleItem.product.gst
+            })
         })
-
+        postData['order_items']  = orderArray
         let options = {
             'method': 'POST',
             'hostname': 'apiv2.shiprocket.in',

@@ -132,3 +132,15 @@ router.use('/cartAssociation', (req, res, next) => {
 //     db.collection('users')
 // })
 exports.cart = router
+
+
+
+
+// const add = (a, b) => {
+//     return a + b
+// }
+
+// const coo = (add) => {
+//     console.log('adasd');
+//     add();
+// }
