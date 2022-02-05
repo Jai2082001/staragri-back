@@ -7,7 +7,7 @@ let db;
 
 
 const mongoConnect = (callback) => {
-    mongoose.connect('mongodb://localhost:27017/myNewDatabase'
+    mongoose.connect('mongodb+srv://jaideep:jaideep@cluster0.4ckhk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
         , {
         useNewUrlParser: true,
         useUnifiedTopology: true
