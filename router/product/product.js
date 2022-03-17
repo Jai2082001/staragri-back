@@ -29,6 +29,7 @@ router.get('/productDisplayWithFilter', (req, res, next)=>{
                 let sendingArray = [];
                 response.map((singleItem)=>{
                     let flag = 0;
+                    console.log(singleItem)
                     singleItem.userType.map((singleItem2)=>{
                         if(singleItem2.label === filter){
                             flag++

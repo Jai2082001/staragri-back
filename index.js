@@ -30,7 +30,7 @@ const {productType} = require('./router/productType/productType');
 const {image} = require('./router/imgDisplay/imgDisplay');
 const {remove} = require('./router/remove/remove');
 
-let port = 3002
+let port = process.env.PORT || 3002
 
 app.use(cors({
     credentials: true,

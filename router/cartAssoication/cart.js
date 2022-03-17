@@ -87,6 +87,7 @@ router.use('/cartItemIncrease', (req, res, next)=>{
 router.use('/cartAssociation', (req, res, next) => {
     const { carts, userid, quantity } = req.body;
     let db = getDb()
+    console.log(userid);
     db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
         let product;
         let flag = 0;
