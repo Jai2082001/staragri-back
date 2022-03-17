@@ -32,10 +32,7 @@ const {remove} = require('./router/remove/remove');
 
 let port = process.env.PORT || 3002
 
-app.use(cors({
-    credentials: true,
-    origin: ['https://www.icicisports.com, https://cycle-admin-d094a.web.app']
-}));
+app.use(cors());
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
