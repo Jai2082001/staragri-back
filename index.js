@@ -34,7 +34,7 @@ let port = process.env.PORT || 3002
 
 app.use(cors({
     credentials: true,
-    origin: ['https://www.icicisports.com/']
+    origin: ['https://www.icicisports.com']
 }));
 app.use(cookieParser())
 app.use(bodyParser.json({limit: '100mb'}))
