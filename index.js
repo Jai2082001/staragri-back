@@ -65,7 +65,7 @@ app.use(productType)
 app.use(image)
 app.use(remove);
 app.get('/', (req, res, next)=>{
-    console.log('here');
+    console.log('here we are');
     res.send({status: 'hello'})
 })
 mongoConnect(() => {
