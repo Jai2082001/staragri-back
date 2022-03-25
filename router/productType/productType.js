@@ -4,10 +4,19 @@ const router = express.Router()
 
 router.use('/addProductType', (req, res, next)=>{
     let db = getDb();
+    console.log("product type")
     const {name} = req.headers;
-    db.collection('productType').insertOne({name: name}).then((response)=>{
-        res.send(response)
+    db.collection('productType').find({name: name}).toArray().then((response)=>{
+        if(response.length > 0){
+            res.send({status: 'alreadyInserted'})
+        }else{
+            db.collection('productType').insertOne({name: name}).then((response)=>{
+                let obj = {name: name}
+                res.send(obj)
+            })
+        }
     })
+    
 })
 
 router.use('/displayProductType', (req,res, next)=>{

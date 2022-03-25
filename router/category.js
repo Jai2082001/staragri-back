@@ -37,6 +37,17 @@ router.use('/categoryAddSub', (req, res, next)=>{
     })
 })
 
+router.use('/categoriesDisplay', (req, res, next)=>{
+    let db = getDb();
+    let {single} = req.headers;
+    console.log(req.headers)
+    console.log(single)
+    db.collection('category').find({parentName: single}).toArray().then((response)=>{
+        console.log(response);
+        res.send(response)
+    })
+})
+
 router.use('/categoryDisplay', (req, res, next) => {
     let db = getDb();
     db.collection('category').find().toArray().then((response) => {

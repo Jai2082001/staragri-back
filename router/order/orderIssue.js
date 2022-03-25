@@ -40,6 +40,7 @@ router.use('/orderUser', (req, res, next)=>{
 
 router.use('/orderReceived', (req, res, next) =>
 {
+    console.log('order received')
     let db = getDb();
     db.collection('orders').find({status: ''}).sort({ _id: -1 }).toArray().then((response) => {
         res.send(response)

@@ -39,8 +39,8 @@ router.use('/loginUser', (req, res, next) => {
     const { email, password } = req.headers;
     db.collection('users').findOne({ email: email, password: password }).then((response) => {
         if (response) {
-            const token = response._id
-            res.cookie('jwt', token)
+            // const token = response._id
+            // res.cookie('jwt', token)
             res.send(response)
         } else {
             res.send({message: 'no authentication'})
@@ -49,26 +49,41 @@ router.use('/loginUser', (req, res, next) => {
 })
 
 router.use('/userAuthenticated', (req, res, next) => {
-    const cookie = req.cookies['jwt'];
+    // const cookie = req.cookies['jwt'];
+    // const cookie2 = req.cookies;
+    const cookie = req.headers.jwt;
+    console.log(cookie)
     let db = getDb();
-    const myId = new ObjectId(cookie);
-    db.collection('users').findOne({ _id: myId }).then((response) => {
-        if (response) {
-         res.send(response);        
-        } else {
-            res.send({status: 'not logged in'})
-        }
-    })
+    if(cookie && cookie !== 'undefined'){
+        const myId = new ObjectId(cookie);
+        db.collection('users').findOne({ _id: myId }).then((response) => {
+            if (response) {
+             res.send(response);        
+            } else {
+                res.send({status: 'not logged in'})
+            }
+        })
+    }else{
+        res.send({status: 'not logged in'})
+    }
+   
 })
 
 router.use('/addUserAddress', (req, res, next) => {
-    const cookie = req.cookies['jwt'];
+    const cookie = req.headers.jwt;
+    console.log(req.headers)
+    console.log('user address')
+    console.log(cookie)
     if (!cookie) {
         return res.send({status: 'not logged in'})      
     }    
-    let db = getDb();
-    const { fullname, city, number, state, address, alternatenum, pincode } = req.headers;
-    db.collection('address').insertOne({ fullname: fullname, number: number, state: state, address: address, alternatenum: alternatenum, pincode: pincode, city: city }).then((response) => {
+    if (cookie === 'undefined'){
+        return res.send({status:  'not logged in'})
+    }
+    else{
+        let db = getDb();
+        const { fullname, city, number, state, address, alternatenum, pincode } = req.headers;
+        db.collection('address').insertOne({ fullname: fullname, number: number, state: state, address: address, alternatenum: alternatenum, pincode: pincode, city: city }).then((response) => {
         db.collection('users').updateOne({ _id: new ObjectId(cookie) }, {
         $push: {
             address: response.insertedId 
@@ -77,6 +92,8 @@ router.use('/addUserAddress', (req, res, next) => {
             res.send(response)
         })
     })
+    }
+    
 })
 
 exports.registerUser = router

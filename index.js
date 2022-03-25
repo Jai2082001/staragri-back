@@ -29,6 +29,7 @@ const {bulkUpdate} = require('./router/bulkUpdate/bulkUpdate');
 const {productType} = require('./router/productType/productType');
 const {image} = require('./router/imgDisplay/imgDisplay');
 const {remove} = require('./router/remove/remove');
+const {productStruct} = require('./router/ProductStruct/ProductStruct')
 
 let port = process.env.PORT || 3002
 
@@ -60,13 +61,15 @@ app.use(random);
 app.use(bulkUpdate)
 app.use(productType)
 app.use(image)
+app.use(productStruct)
 app.use(remove);
 app.get('/', (req, res, next)=>{
     console.log('here we are');
+    console.log(req.cookies)
     res.send({status: 'hello'})
 })
 mongoConnect(() => {
     app.listen(port, ()=>{
-        console.log('Connected')
+        console.log('Connected at ' + port)
     });
 })
