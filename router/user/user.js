@@ -7,9 +7,22 @@ const { ObjectId } = require('mongodb');
 router.use('/registerUserSignUp', (req, res, next) => {
     let db = getDb();
     const {name, email, number, password} = req.headers
-    db.collection('users').insertOne({ name: name, email: email, number: number, password: password }).then((response) => {
-        res.send({status: 'insertedUser'})
+    db.collection('users').findOne({email: email}).then((response)=>{
+        if(response){
+            res.send({status: "Email already in use"})
+        }else{
+            db.collection('users').findOne({number: number}).then((response)=>{
+                if(response){
+                    res.send({status: "Phone Number already in use"})
+                }else{
+                    db.collection('users').insertOne({ name: name, email: email, number: number, password: password }).then((response) => {
+                        res.send({status: 'insertedUser'})
+                    })
+                }
+            })
+        }
     })
+
 })
 
 router.use('/updateUser', (req, res, next)=>{
@@ -36,16 +49,31 @@ router.use('/logoutUser', (req, res, next)=>{
 
 router.use('/loginUser', (req, res, next) => {
     let db = getDb();
-    const { email, password } = req.headers;
-    db.collection('users').findOne({ email: email, password: password }).then((response) => {
-        if (response) {
-            // const token = response._id
-            // res.cookie('jwt', token)
-            res.send(response)
-        } else {
-            res.send({message: 'no authentication'})
-        }
-    })
+    const { email, password, src } = req.headers;
+
+    if(src === 'email'){
+        db.collection('users').findOne({ email: email, password: password }).then((response) => {
+            if (response) {
+                // const token = response._id
+                // res.cookie('jwt', token)
+                res.send(response)
+            } else {
+                res.send({message: 'no authentication'})
+            }
+        })
+    }else{
+        db.collection('users').findOne({ number: email, password: password }).then((response) => {
+            if (response) {
+                // const token = response._id
+                // res.cookie('jwt', token)
+                res.send(response)
+            } else {
+                res.send({message: 'no authentication'})
+            }
+        })
+    }
+
+    
 })
 
 router.use('/userAuthenticated', (req, res, next) => {

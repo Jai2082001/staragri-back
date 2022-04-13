@@ -1,8 +1,20 @@
+const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const getDb = require('../../database/database').getDb;
+const {ObjectId} = require("mongodb")
 
 
+router.get('/productDisplayWithId', (req, res, next)=>{
+    let db = getDb();
+    let {productid} = req.headers;
+    console.log("Product Display With ID ")
+    console.log(req.headers)
+    db.collection("seeds").findOne({_id: new ObjectId(productid)}).then((response)=>{
+        console.log(response);
+        res.send({product: response})
+    })    
+})
 
 router.get('/productDisplayWithFilter', (req, res, next)=>{
     let db = getDb();
@@ -84,6 +96,15 @@ router.get('/productDisplayWithFilter', (req, res, next)=>{
     
 })
 
+router.use(`/productNew`, (req, res, next)=>{
+    console.log("product new");
+    let db = getDb();
+    db.collection("seeds").find({}).sort({_id: -1}).limit(4).toArray().then((response)=>{
+        console.log(response);
+        res.send({records: response})
+    })
+})
+
 
 router.use('/productNames', (req, res, next)=>{
     let db = getDb();
@@ -106,6 +127,62 @@ router.use('/productDisplay', (req, res, next)=>{
 })
 
 
+router.use('/categoryDisplaySeed', (req, res, next)=>{
+    let db = getDb();
+    let {name, parentname} = req.headers;
+    console.log('Category Display Seed')
+    console.log(name);
+    console.log(parentname)
+    if(name === 'undefined'){
+        const obj = {};
+        obj[`level.name`] = parentname;
+        db.collection('seeds').find(obj).toArray().then((response)=>{
+            console.log(response);
+            res.send(response)
+        })
+    }else{
+        const obj = {}
+        obj['level.name'] = parentname;
+        obj['level2.name'] = name;
+        db.collection('seeds').find(obj).toArray().then((response)=>{
+            console.log(response);
+            res.send(response)
+        })
+    }
+})
+
+
+
+router.use('/seasonalOrder', (req, res, next)=>{
+    let db = getDb();
+    const date = new Date();
+    const dateArray = date.toLocaleDateString().split("/")
+    let season = '';
+    if(parseInt(dateArray[1]) >= 1 || parseInt(dateArray[1]) <= 3){
+        season = 'Summer'
+    }else if(parseInt(dateArray[1]) === 4){
+        if(parseInt(dateArray[0] <= 15)){
+            season = 'Summer'
+        }else{
+            season = 'Kharif'    
+        }
+    }else if(parseInt(dateArray[1]) >= 5 && parseInt(dateArray[1] <= 7) ){
+        season = "Kharif"
+    }else if(parseInt(dateArray[1])===8){
+        if(parseInt(dateArray[0] <= 15)){
+            season = 'Kharif'
+        }else{
+            season = 'Rabi'    
+        }
+    }else if(parseInt(dateArray[1] >= 9)){
+        season = "Rabi"
+    }
+    
+    db.collection('seeds').find({season: season}).toArray().then((response)=>{
+        res.send(response)
+    })
+
+})
 
 // router.use('/productDisplay', async (req, res, next) => {
 //     let db = getDb();

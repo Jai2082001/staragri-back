@@ -6,7 +6,7 @@ const mongoClient = mongoDb.MongoClient;
 let db;
 
 const mongoConnect = (callback) => {
-    mongoose.connect('mongodb+srv://jaideeGrover:jaideep3282@cluster0.ydgem.mongodb.net/newDatabase?retryWrites=true&w=majority'
+    mongoose.connect('mongodb+srv://jaideep:jaideep3282@cluster0.4ckhk.mongodb.net/seedDatabase?retryWrites=true&w=majority'
         , {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -16,7 +16,7 @@ const mongoConnect = (callback) => {
 
     db.on('error', () => {
         console.log('some error has occured')   
-    })
+    }) 
 
     db.once('open', () => {
         console.log('connected to database')

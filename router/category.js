@@ -18,8 +18,6 @@ router.use('/categoryAdd', (req, res, next) => {
     })
 })
 
-
-
 router.use('/categoryDisplaySub', (req, res, next)=>{
     let db = getDb();
     let {addedby} = req.headers;
@@ -50,6 +48,7 @@ router.use('/categoriesDisplay', (req, res, next)=>{
 
 router.use('/categoryDisplay', (req, res, next) => {
     let db = getDb();
+    console.log("Category Display")
     db.collection('category').find().toArray().then((response) => {
         res.send(response)  
     })

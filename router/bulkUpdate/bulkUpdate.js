@@ -41,10 +41,10 @@ router.use('/addBulkProduct', (req, res, next)=>{
                         product.stock = false
                     }
 
-                    if (product.emi === 'Yes' || product.emi === 'yes' ||  product.stock === 'YES'){
-                        product.stock = true
+                    if (product.emi === 'Yes' || product.emi === 'yes' ||  product.emi === 'YES'){
+                        product.emi = true
                     }else{
-                        product.stock = false
+                        product.emi = false
                     }
                     product.brand = {};
                     product.category = {};
@@ -85,10 +85,10 @@ router.use('/addBulkProduct', (req, res, next)=>{
                     product.stock = false
                 }
 
-                if (product.emi === 'Yes' || product.emi === 'yes' ||  product.stock === 'YES'){
-                    product.stock = true
+                if (product.emi === 'Yes' || product.emi === 'yes' ||  product.emi === 'YES'){
+                    product.emi = true
                 }else{
-                    product.stock = false
+                    product.emi = false
                 }
 
                 if(product.forProduct === 'Cycle'){
@@ -121,9 +121,9 @@ router.use('/addBulkProduct', (req, res, next)=>{
                     }
 
                     if(product.emi === 'Yes' || product.emi === 'yes' || product.emi === 'YES'){
-                        product.stock = true
+                        product.emi = true
                     }else{
-                        product.stock = false;
+                        product.emi = false;
                     }
                     product.brand = {};
                     product.category = {};
